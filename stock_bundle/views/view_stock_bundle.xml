@@ -1,0 +1,103 @@
+<odoo>
+	<record id="view_stock_bundle_search" model="ir.ui.view">
+		<field name="name">stock.bundle.search</field>
+		<field name="model">stock.bundle</field>
+		<field name="arch" type="xml">
+			<search string="Search bundle">
+				<field name="name"
+					filter_domain="['|', '|', ('name','ilike',self), ('product_id','ilike',self), ('line_ids.product_id','ilike',self)]" />
+				<!-- <group expand="0" string="Group By"> -->
+				<!-- <filter string="Product" domain="[]" context="{'group_by':'product_id'}" /> -->
+				<!-- </group> -->
+			</search>
+		</field>
+	</record>
+
+	<record id="view_stock_bundle_tree" model="ir.ui.view">
+		<field name="name">stock.bundle.tree</field>
+		<field name="model">stock.bundle</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name" />
+				<field name="product_id" />
+				<field name="uom_id" />
+				<field name="product_uom_qty" />
+				<field name="state" />
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_stock_bundle_form" model="ir.ui.view">
+		<field name="name">stock.bundle.form</field>
+		<field name="model">stock.bundle</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="action_done" string="Bundle" states='draft' type="object"
+						class="btn-primary" />
+					<button name="action_cancel" string="Cancel" states='draft' type="object" />
+					<button name="action_draft" string="Set to Draft" states='cancel' type="object" />
+					<field name="state" widget="statusbar" statusbar_visible="draft,done" />
+				</header>
+				<sheet>
+					<div class="pull-left">
+						<label for="name" class="oe_edit_only oe_inline" />
+						<h1>
+							<field name="name" readonly="1" />
+						</h1>
+					</div>
+					<group col="2">
+						<group>
+							<field name="product_id" attrs="{'readonly': [('state','not in',('draft'))]}" />
+							<field name="product_uom_qty" />
+							<field name="uom_id" />
+						</group>
+						<group>
+							<field name="create_date" readonly="1" />
+							<field name="warehouse_id" attrs="{'readonly': [('state','not in',('draft'))]}" />
+						</group>
+					</group>
+					<notebook>
+						<page string="Product to Bundle">
+							<field name="line_ids" attrs="{'readonly': [('state','!=', 'draft')]}">
+								<tree editable="bottom">
+									<field name="product_id" />
+									<field name="product_uom_qty" />
+									<field name="uom_id" />
+								</tree>
+								<form>
+									<group>
+										<field name="product_id" />
+										<field name="product_uom_qty" />
+										<field name="uom_id" />
+									</group>
+								</form>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" />
+					<field name="activity_ids" widget="mail_activity" />
+					<field name="message_ids" widget="mail_thread" />
+				</div>
+			</form>
+		</field>
+	</record>
+
+	<record model="ir.actions.act_window" id="action_stock_bundle">
+		<field name="name">Product Bundle</field>
+		<field name="res_model">stock.bundle</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="view_stock_bundle_search" />
+		<field name="help" type="html">
+			<p class="oe_view_nocontent_create">
+				Bundle products!
+			</p>
+		</field>
+	</record>
+
+	<menuitem id="menu_stock_bundle" sequence="11" parent="stock.menu_stock_warehouse_mgmt"
+		action="action_stock_bundle" />
+</odoo>

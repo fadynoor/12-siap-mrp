@@ -1,0 +1,11 @@
+<odoo>
+	<record id="sequence_stock_bundle" model="ir.sequence">
+		<field name="name">Product Bundle Sequence</field>
+		<field name="code">stock.bundle</field>
+		<field eval="1" name="number_next" />
+		<field eval="1" name="number_increment" />
+		<field name="padding">3</field>
+		<field name="prefix">BUNDLE/%(year)s%(month)s/</field>
+		<field name="use_date_range" eval="True" />
+	</record>
+</odoo>
