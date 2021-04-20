@@ -1,0 +1,4 @@
+[submodule "ArkanaDigital/jakartaallumfoil"]
+	path = ArkanaDigital/jakartaallumfoil
+	url = git@github.com:ArkanaDigital/jakartaallumfoil.git
+	branch = master
